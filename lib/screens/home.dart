@@ -16,7 +16,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home>{
-  String title, name, faculty, major, address, photo;
+  String title, name, faculty, major, address, photo,
+  url = 'http://192.168.0.5:8000/';
   int id;
   File _image;
   bool _status = true, loading = true;
@@ -133,7 +134,7 @@ class _HomeState extends State<Home>{
 
   Future updateUser() async{
     final response =
-    await http.post(Uri.parse("http://192.168.0.5:8000/api/v1/user_update/"+id.toString()+'?_method=PUT'),
+    await http.post(Uri.parse(url+"api/v1/user_update/"+id.toString()+'?_method=PUT'),
         body: {
           "name" : _nameController.text,
           "faculty" : _facultyController.text,
@@ -200,7 +201,7 @@ class _HomeState extends State<Home>{
                                           shape: BoxShape.circle,
                                           image: new DecorationImage(
                                             image: new NetworkImage(
-                                                'http://192.168.0.5:8000/image/'+photo),
+                                                url+'image/'+photo),
                                             fit: BoxFit.cover,
                                           ),
                                         )):
@@ -480,7 +481,7 @@ class _HomeState extends State<Home>{
     lookupMimeType(image.path, headerBytes: [0xFF, 0xD8]).split('/');
 
     final imageUploadRequest = http.MultipartRequest('POST', Uri.parse(
-        "http://192.168.0.5:8000/api/v1/user_update/"+id.toString()+"?_method=PUT"));
+        url+"api/v1/user_update/"+id.toString()+"?_method=PUT"));
 
     final file = await http.MultipartFile.fromPath(
         'photo', image.path,
